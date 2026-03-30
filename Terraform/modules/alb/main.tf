@@ -2,8 +2,8 @@ resource "aws_lb" "ecs-v3-alb" {
   name               = "ecs-v3-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = ""
-  subnets            = ""
+  security_groups    = [var.ecs_sg_alb]
+  subnets            = [var.public_subnet_ids]
 
   enable_deletion_protection = false
 
