@@ -18,3 +18,8 @@ module "alb" {
   source = "./modules/alb"
   vpc_id = module.vpc.vpc_id
 }
+
+module "security-groups" {
+  source = "./modules/security-groups"
+  vpc_id = module.vpc.vpc_id
+}
