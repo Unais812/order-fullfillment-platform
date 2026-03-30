@@ -22,6 +22,15 @@ module "ecs-api-gatewway" {
   ecs_cluster_id = module.ecs-cluster.ecs_cluster_id
 }
 
+module "ecs-dashboard-api" {
+  source = "./modules/ecs-dashboard-api"
+  ecs_sg = module.security-groups.ecs_sg
+  private_subnet_ids = module.vpc.private_subnet_ids
+  dashboard_api_target_group = module.alb.dashboard_api_target_group
+  ecs_cluster_id = module.ecs-cluster.ecs_cluster_id
+  execution_role_arn = module.iam.execution_role_arn
+}
+
 module "alb" {
   source = "./modules/alb"
   vpc_id = module.vpc.vpc_id
