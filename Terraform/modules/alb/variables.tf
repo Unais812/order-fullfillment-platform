@@ -11,7 +11,7 @@ variable "vpc_id" {
 
 variable "public_subnet_ids" {
   description = "ids of the public subnetys"
-  type = string
+  type = list(string)
 }
 
 variable "ecs_sg_alb" {
