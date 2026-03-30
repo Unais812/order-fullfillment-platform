@@ -12,6 +12,7 @@ module "ecs" {
   source = "./modules/ecs"
   execution_role_arn = module.iam.execution_role_arn
   api_gateway_target_group = module.alb.api_gateway_target_group
+  ecs_sg = module.security-groups.ecs_sg
 }
 
 module "alb" {
