@@ -1,0 +1,3 @@
+locals {
+    name = "api-gateway"
+}
