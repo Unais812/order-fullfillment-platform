@@ -9,12 +9,17 @@ module "secret" {
   jwt_secret  = var.jwt_secret
 }
 
-module "ecs" {
-  source = "./modules/ecs"
+module "ecs-cluster" {
+  source = "./modules/ecs-cluster"
+}
+
+module "ecs-api-gatewway" {
+  source = "./modules/ecs-api-gateway"
   execution_role_arn = module.iam.execution_role_arn
   api_gateway_target_group = module.alb.api_gateway_target_group
   ecs_sg = module.security-groups.ecs_sg
   private_subnet_ids = module.vpc.private_subnet_ids
+  ecs_cluster_id = module.ecs-cluster.ecs_cluster_id
 }
 
 module "alb" {
