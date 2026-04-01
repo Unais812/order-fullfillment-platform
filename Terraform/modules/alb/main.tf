@@ -6,12 +6,6 @@ resource "aws_lb" "ecs-v3-alb" {
   subnets            = var.public_subnet_ids
   enable_deletion_protection = false
 
-#   access_logs {
-#     bucket  = aws_s3_bucket.alb-logs-ecs-v3.id
-#     prefix  = "ecs-v3-alb"
-#     enabled = true
-#   }
-
   tags = {
     Name = "ecs-v3-alb"
   }
@@ -26,11 +20,11 @@ resource "aws_lb_target_group" "api-gateway" {
   
    health_check {
      path = "/healthz"
-     interval = 50
+     interval = 10
      matcher = 200
      timeout = 5
-     healthy_threshold = 3
-     unhealthy_threshold = 3
+     healthy_threshold = 2
+     unhealthy_threshold = 2
   }
 
   tags = {
@@ -38,79 +32,15 @@ resource "aws_lb_target_group" "api-gateway" {
   }
 }
 
-resource "aws_lb_target_group" "dashboard-api" {
-  name     = "dashboard-api-target-group"
-  target_type = "ip"
-  port     = 8086
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
 
-   health_check {
-     path = "/healthz"
-     interval = 50
-     matcher = 200
-     timeout = 5
-     healthy_threshold = 3
-     unhealthy_threshold = 3
-  }
-
-  tags = {
-    Name = "dashboard-api-target-group"
-  }
-}
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.ecs-v3-alb.arn
   port              = 80
   protocol          = "HTTP"
 
-  default_action {
-    type = "fixed-response"
-
-    # if the wrong path is typed, users are redirected to 404 error page
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "not found"
-      status_code  = "404"
-    }
-  }
+ default_action {
+  type             = "forward"
+  target_group_arn = aws_lb_target_group.api-gateway.arn
 }
-
-resource "aws_lb_listener_rule" "api-gateway" {
-  listener_arn = aws_lb_listener.http.arn
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.api-gateway.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/api/*"]
-    }
-  }
 }
-
-resource "aws_lb_listener_rule" "dashboard-api" {
-  listener_arn = aws_lb_listener.http.arn
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.dashboard-api.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/dashboard/*"]
-    }
-  }
-}
-
-# resource "aws_s3_bucket" "alb-logs-ecs-v3" {
-#   bucket = "alb-logs-ecs-v3"
-
-#   tags = {
-#     Name = "ecs-v3-alb-logs-bucket"
-#   }
-# }
-
