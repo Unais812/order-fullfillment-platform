@@ -33,6 +33,13 @@ resource "aws_ecs_task_definition" "api-gateway-task" {
 
         }
        }
+
+      secrets = [
+        {
+            name = "JWT_SECRET"
+            valueFrom = var.jwt_secret_arn
+        }
+      ]
     },
   ])
 

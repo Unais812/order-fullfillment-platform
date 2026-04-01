@@ -64,3 +64,8 @@ variable "ecs_cluster_id" {
   description = "id of the cluster"
   type = string
 }
+
+variable "jwt_secret_arn" {
+  description = "jwt secret"
+  type = string
+}
