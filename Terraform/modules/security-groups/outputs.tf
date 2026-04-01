@@ -9,3 +9,7 @@ output "ecs_sg_alb" {
 output "vpc_endpoint_sg" {
   value = aws_security_group.vpc_endpoint_sg.id
 }
+
+output "rds_sg" {
+  value = aws_security_group.rds_sg.id
+}
