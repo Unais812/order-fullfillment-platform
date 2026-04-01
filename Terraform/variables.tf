@@ -4,8 +4,14 @@ variable "db_password" {
   sensitive   = true
 }
 
+variable "database_url_secret_arn" {
+  description = "url for the database"
+  type = string
+  sensitive = true
+}
+
 variable "jwt_secret" {
-  description = "JWT signing secret"
-  type        = string
-  sensitive   = true
+  description = "jwt_secret"
+  type = string
+  sensitive = true
 }
