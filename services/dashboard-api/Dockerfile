@@ -10,8 +10,6 @@ COPY go.mod go.sum ./
 # Cache dependencies separately so Docker doesn't re-download them on every build
 RUN go mod download 
 
-ENV DATABASE_URL=postgres://user:password@host:5432/dbname
-
 # Copy the entire application source
 COPY . .
 
@@ -21,13 +19,12 @@ RUN go build -o /app .
 # Final lightweight stage
 FROM gcr.io/distroless/static-debian12 
 
-# Copy the compiled binary from the builder stage
-COPY --from=builder /app /bin/app
+WORKDIR /
 
-# Distroless image already has a user baked in 
-USER nonroot 
+COPY --from=builder /build/app /app
+
+USER nonroot
 
 EXPOSE 8086
 
-# Run the application
-CMD ["/bin/app"]
+CMD ["/app"]
