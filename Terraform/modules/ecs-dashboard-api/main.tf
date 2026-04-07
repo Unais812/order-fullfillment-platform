@@ -64,4 +64,5 @@ resource "aws_ecs_service" "dashboard-api-service" {
   service_registries {
     registry_arn = var.service_discovery_arn
   }
+
 }

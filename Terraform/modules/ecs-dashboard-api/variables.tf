@@ -1,7 +1,7 @@
 variable "image" {
   description = "image for the api-gateway"
   type = string
-  default = "801822495646.dkr.ecr.eu-north-1.amazonaws.com/dashboard-api:latest"
+  default = "801822495646.dkr.ecr.eu-north-1.amazonaws.com/dashboard-api@sha256:f0bea5e3e4573fa8cf8c10ee8f577c6c55276af02a929190e028d3a0f3f703d9"
 }
 
 variable "container_port" {

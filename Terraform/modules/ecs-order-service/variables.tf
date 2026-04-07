@@ -75,3 +75,8 @@ variable "task_role_arn" {
   description = "the arn for the task role for order service"
   type = string
 }
+
+variable "sqs_queue_url" {
+  description = "url for sqs queue"
+  type = string
+}

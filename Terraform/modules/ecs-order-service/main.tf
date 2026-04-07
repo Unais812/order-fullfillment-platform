@@ -17,6 +17,13 @@ resource "aws_ecs_task_definition" "order-service-task" {
       name      = local.name
       image     = var.image
       essential = true
+
+      environment = [
+      {
+        name  = "SQS_QUEUE_URL"
+        value = var.sqs_queue_url
+      }
+      ]
       
       portMappings = [
         {
