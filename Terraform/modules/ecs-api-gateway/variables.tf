@@ -69,3 +69,43 @@ variable "jwt_secret_arn" {
   description = "jwt secret"
   type = string
 }
+
+variable "sqs_queue_url" {
+  description = "url for sqs queue"
+  type = string
+}
+
+variable "order_service_url" {
+  description = "url for the order service"
+  type = string
+}
+
+variable "inventory_service_url" {
+  description = "url for the inventory service"
+  type = string
+}
+
+variable "payment_service_url" {
+  description = "url for the payment service"
+  type = string
+}
+
+variable "notification_service_url" {
+  description = "url for the payment service"
+  type = string
+}
+
+variable "shipping_service_url" {
+  description = "url for the shipping service"
+  type = string
+}
+
+variable "dashboard_service_url" {
+  description = "url for the dashboard service"
+  type = string
+}
+
+variable "elasticache_url" {
+  description = "url for elasticache"
+  type = string
+}

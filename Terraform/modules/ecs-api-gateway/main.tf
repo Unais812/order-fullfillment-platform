@@ -24,6 +24,37 @@ resource "aws_ecs_task_definition" "api-gateway-task" {
         }
       ]
 
+      environment = [
+      {
+        name  = "REDIS_URL"
+        value = var.elasticache_url
+      },
+      {
+        name  = "ORDER_SERVICE_URL"
+        value = var.order_service_url
+      },
+      {
+        name  = "INVENTORY_SERVICE_URL"
+        value = var.inventory_service_url
+      },
+      {
+        name  = "PAYMENT_SERVICE_URL"
+        value = var.payment_service_url
+      },
+      {
+        name  = "NOTIFICATION_SERVICE_URL"
+        value = var.notification_service_url
+      },
+      {
+        name  = "SHIPPING_SERVICE_URL"
+        value = var.shipping_service_url
+      },
+      {
+        name  = "DASHBOARD_SERVICE_URL"
+        value = var.dashboard_service_url
+      }
+    ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
