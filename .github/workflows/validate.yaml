@@ -30,6 +30,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.ACTION_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
+          role-session-name: GitHubActions 
             
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
