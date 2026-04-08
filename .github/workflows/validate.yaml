@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "**/*.tf"
-      
+
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
 
@@ -12,6 +12,10 @@ jobs:
   terraform-check:
     name: Terraform check
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
 
     defaults:
       run:
