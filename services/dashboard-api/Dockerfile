@@ -19,7 +19,7 @@ RUN go build -o /app .
 # Final lightweight stage
 FROM gcr.io/distroless/static-debian12 
 
-WORKDIR /
+WORKDIR /build
 
 COPY --from=builder /build/app /app
 
