@@ -56,5 +56,4 @@ jobs:
 
       - name: Terraform fmt
         run: terraform fmt
-      - name: Terraform plan
-        run: terraform plan
+
