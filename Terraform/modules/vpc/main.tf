@@ -104,7 +104,6 @@ resource "aws_service_discovery_service" "ecs_tasks_dns_discovery" {
       ttl  = 10
       type = "A"
     }
-
     routing_policy = "MULTIVALUE"
   }
 }
