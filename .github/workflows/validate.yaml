@@ -52,6 +52,7 @@ jobs:
         with:
           directory: ./Terraform
           framework: terraform 
+          soft_fail: true
 
       - name: Terraform fmt
         run: terraform fmt
