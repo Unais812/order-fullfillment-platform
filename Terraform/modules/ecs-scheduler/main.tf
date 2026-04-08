@@ -3,6 +3,7 @@ resource "aws_cloudwatch_log_group" "cw_log_group_scheduler" {
   retention_in_days = var.log_days
 }
 
+
 resource "aws_ecs_task_definition" "scheduler-task" {
   family = local.name
   requires_compatibilities = ["FARGATE"]

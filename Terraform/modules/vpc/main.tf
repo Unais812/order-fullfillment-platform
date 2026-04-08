@@ -36,7 +36,7 @@ resource "aws_route_table" "public-route-table" {
     cidr_block = var.public_cidr
     gateway_id = aws_internet_gateway.igw.id
   }
-
+  
   tags = {
     Name = "${local.name}-public-route-table"
   }
@@ -98,7 +98,7 @@ resource "aws_service_discovery_service" "ecs_tasks_dns_discovery" {
   name = each.value
 
   dns_config {
-    
+
     namespace_id = aws_service_discovery_private_dns_namespace.ecs_discovery.id
 
     dns_records {
