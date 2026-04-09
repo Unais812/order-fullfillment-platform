@@ -63,6 +63,7 @@ resource "aws_ecs_service" "order-service" {
   task_definition = aws_ecs_task_definition.order-service-task.arn
   desired_count   = 1
   launch_type = "FARGATE"
+  enable_execute_command = true
 
   network_configuration {
     security_groups = [var.ecs_sg]
