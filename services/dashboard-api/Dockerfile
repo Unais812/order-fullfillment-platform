@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go binary
-RUN go build -o /app .
+RUN go build -o app .
 
 # Final lightweight stage
 FROM gcr.io/distroless/static-debian12 
