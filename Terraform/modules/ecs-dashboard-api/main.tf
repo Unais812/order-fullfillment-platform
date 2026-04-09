@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "dashboard-api-task" {
   execution_role_arn = var.execution_role_arn
   memory = 512
   cpu = 256
-  
+  task_role_arn = var.task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -56,6 +56,7 @@ resource "aws_ecs_service" "dashboard-api-service" {
   desired_count   = 1
   launch_type = "FARGATE"
   enable_execute_command = true
+
 
   network_configuration {
     security_groups = [var.ecs_sg]

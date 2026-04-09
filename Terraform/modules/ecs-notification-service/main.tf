@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "notification-service-task" {
   execution_role_arn = var.execution_role_arn
   memory = 512
   cpu = 256
-
+  task_role_arn = var.task_role_arn
   container_definitions = jsonencode([
     {
       name      = local.name

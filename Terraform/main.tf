@@ -23,6 +23,7 @@ module "ecs-api-gatewway" {
   dashboard_service_url = module.vpc.service_discovery_urls["dashboard-api"]
   elasticache_url = module.elasticache.elasticache_arn
   sqs_queue_url = module.sqs.queue_url
+  task_role_arn = module.iam.api_gateway_task_role_arn
 }
 
 module "ecs-dashboard-api" {
@@ -33,6 +34,7 @@ module "ecs-dashboard-api" {
   ecs_sg = module.security-groups.ecs_sg
   database_url_secret_arn =  module.secrets.database_url_arn
   service_discovery_arn = module.vpc.service_discovery_arns["dashboard-api"]
+  task_role_arn = module.iam.dashboard_api_task_role_arn
 }
 
 module "ecs-inventory-service" {
@@ -43,6 +45,7 @@ module "ecs-inventory-service" {
   execution_role_arn = module.iam.execution_role_arn
   ecs_sg = module.security-groups.ecs_sg
   service_discovery_arn = module.vpc.service_discovery_arns["inventory-service"]
+  task_role_arn = module.iam.inventory_service_task_role_arn
 }
 
 module "notification-service" {
@@ -53,6 +56,7 @@ module "notification-service" {
   execution_role_arn = module.iam.execution_role_arn
   ecs_sg = module.security-groups.ecs_sg
   service_discovery_arn = module.vpc.service_discovery_arns["notification-service"]
+  task_role_arn = module.iam.notification_service_task_role_arn
 }
 
 module "order-service" {
@@ -88,6 +92,7 @@ module "scheduler-service" {
   ecs_cluster_id = module.ecs-cluster.ecs_cluster_id
   execution_role_arn = module.iam.execution_role_arn
   ecs_sg = module.security-groups.ecs_sg
+  task_role_arn = module.iam.scheduler_task_role_arn
 }
 
 module "shipping-service" {

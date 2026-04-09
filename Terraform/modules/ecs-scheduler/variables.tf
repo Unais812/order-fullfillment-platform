@@ -65,3 +65,8 @@ variable "database_url_secret_arn" {
   type = string
   sensitive = true
 }
+
+variable "task_role_arn" {
+  description = "arn of the task role"
+  type = string
+}

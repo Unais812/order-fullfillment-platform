@@ -109,3 +109,8 @@ variable "elasticache_url" {
   description = "url for elasticache"
   type = string
 }
+
+variable "task_role_arn" {
+  description = "arn of the task role"
+  type = string
+}

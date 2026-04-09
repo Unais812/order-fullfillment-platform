@@ -70,3 +70,8 @@ variable "service_discovery_arn" {
   description = "arn of the service discovery"
   type = string
 }
+
+variable "task_role_arn" {
+  description = "arn of the task role"
+  type = string
+}

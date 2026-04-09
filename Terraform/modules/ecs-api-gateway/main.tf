@@ -10,6 +10,7 @@ resource "aws_ecs_task_definition" "api-gateway-task" {
   execution_role_arn = var.execution_role_arn
   memory = 512
   cpu = 256
+  task_role_arn = var.task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -85,7 +86,7 @@ resource "aws_ecs_service" "api-gateway-service" {
   task_definition = aws_ecs_task_definition.api-gateway-task.arn
   desired_count   = 1
   launch_type = "FARGATE"
-
+  
   network_configuration {
     security_groups = [var.ecs_sg]
     subnets = var.private_subnet_ids
