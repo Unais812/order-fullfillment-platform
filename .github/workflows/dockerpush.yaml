@@ -93,7 +93,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker push $ECR_REGISTRY/${{ matrix.service }}:$IMAGE_TAG
           docker push $ECR_REGISTRY/${{ matrix.service }}:latest
 
       # - name: Deploy to ECS
