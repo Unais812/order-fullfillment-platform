@@ -306,6 +306,17 @@ resource "aws_iam_role_policy" "api_gateway_policy" {
         ]
 
         Resource = "*"
+      },
+
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ],
+        "Resource": "*"
       }
     ]
   })
