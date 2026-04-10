@@ -86,6 +86,10 @@ resource "aws_ecs_service" "api-gateway-service" {
   task_definition = aws_ecs_task_definition.api-gateway-task.arn
   desired_count   = 1
   launch_type = "FARGATE"
+
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
   
   network_configuration {
     security_groups = [var.ecs_sg]

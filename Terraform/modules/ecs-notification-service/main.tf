@@ -55,6 +55,10 @@ resource "aws_ecs_service" "notification-service" {
   desired_count   = 1
   launch_type = "FARGATE"
 
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
+
   network_configuration {
     security_groups = [var.ecs_sg]
     subnets = var.private_subnet_ids

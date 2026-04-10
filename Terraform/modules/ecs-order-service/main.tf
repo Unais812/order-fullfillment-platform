@@ -65,6 +65,10 @@ resource "aws_ecs_service" "order-service" {
   launch_type = "FARGATE"
   enable_execute_command = true
 
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
+
   network_configuration {
     security_groups = [var.ecs_sg]
     subnets = var.private_subnet_ids

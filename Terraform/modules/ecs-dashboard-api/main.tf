@@ -57,6 +57,10 @@ resource "aws_ecs_service" "dashboard-api-service" {
   launch_type = "FARGATE"
   enable_execute_command = true
 
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
+
 
   network_configuration {
     security_groups = [var.ecs_sg]
