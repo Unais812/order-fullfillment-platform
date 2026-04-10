@@ -86,7 +86,10 @@ resource "aws_ecs_service" "api-gateway-service" {
   task_definition = aws_ecs_task_definition.api-gateway-task.arn
   desired_count   = 1
   launch_type = "FARGATE"
+  enable_execute_command = true
 
+  # CI/CD manages the task definition after initial creation.
+  # Without this, terraform apply reverts every deployment CI/CD has done.
   lifecycle {
     ignore_changes = [task_definition]
   }
