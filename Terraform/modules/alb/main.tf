@@ -29,44 +29,44 @@ resource "aws_lb_target_group" "api-gateway" {
 }
 
 
-# resource "aws_lb_target_group" "dashboard-api" {
-#   name     = "dashboard-api-target-group"
-#   target_type = "ip"
-#   port     = 8086
-#   protocol = "HTTP"
-#   vpc_id   = var.vpc_id
+resource "aws_lb_target_group" "dashboard-api" {
+  name     = "dashboard-api-target-group"
+  target_type = "ip"
+  port     = 8086
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
 
-#    health_check {
-#      path = "/healthz"
-#      interval = 50
-#      matcher = 200
-#      timeout = 5
-#      healthy_threshold = 3
-#      unhealthy_threshold = 3
-#   }
-# }
+   health_check {
+     path = "/healthz"
+     interval = 50
+     matcher = 200
+     timeout = 5
+     healthy_threshold = 3
+     unhealthy_threshold = 3
+  }
+}
 
-# resource "aws_lb_listener_rule" "dashboard-ui" {
-#   listener_arn = aws_lb_listener.http.arn
-#   priority     = 5
+resource "aws_lb_listener_rule" "dashboard-ui" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 5
 
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.dashboard-api.arn
-#   }
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.dashboard-api.arn
+  }
 
-#   condition {
-#     path_pattern {
-#       values = [
-#         "/",
-#         "/dashboard",
-#         "/dashboard/*",
-#         "/static/*",
-#         "/assets/*"
-#       ]
-#     }
-#   }
-# }
+  condition {
+    path_pattern {
+      values = [
+        "/",
+        "/dashboard",
+        "/dashboard/*",
+        "/static/*",
+        "/assets/*"
+      ]
+    }
+  }
+}
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.ecs-v3-alb.arn
@@ -96,7 +96,10 @@ resource "aws_lb_listener_rule" "api-gateway" {
 
   condition {
     path_pattern {
-      values = ["/"]
+      values = [
+        "/api/*",
+        "/auth/*"
+        ]
     }
   }
 }
