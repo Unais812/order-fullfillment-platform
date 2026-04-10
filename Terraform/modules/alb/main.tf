@@ -37,7 +37,7 @@ resource "aws_lb_target_group" "dashboard-api" {
   vpc_id   = var.vpc_id
 
    health_check {
-     path = "/healthz"
+     path = "/dashboard/healthz"
      interval = 50
      matcher = 200
      timeout = 5
