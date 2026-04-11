@@ -22,9 +22,6 @@ FROM golang:1.23-alpine
 # Copy the compiled binary from the builder stage
 COPY --from=builder /app /bin/app
 
-# Distroless image already has a user baked in 
-USER nonroot 
-
 EXPOSE 8081
 
 # Run the application
