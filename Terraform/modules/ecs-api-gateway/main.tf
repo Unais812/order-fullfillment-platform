@@ -90,10 +90,12 @@ resource "aws_ecs_service" "api-gateway-service" {
 
   # CI/CD manages the task definition after initial creation.
   # Without this, terraform apply reverts every deployment CI/CD has done.
+
   lifecycle {
     ignore_changes = [task_definition]
   }
-  
+
+
   network_configuration {
     security_groups = [var.ecs_sg]
     subnets = var.private_subnet_ids
