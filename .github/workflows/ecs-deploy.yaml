@@ -1,0 +1,66 @@
+name: Force ECS Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      services:
+        description: 'Services to redeploy (comma-separated, or "all")'
+        required: true
+        default: 'all'
+        type: string
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+jobs:
+  prepare:
+    name: Prepare service matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Set matrix
+        id: set-matrix
+        run: |
+          ALL_SERVICES='["api-gateway","order-service","inventory-service","payment-service","notification-service","shipping-service","worker","scheduler","dashboard-api"]'
+
+          INPUT="${{ github.event.inputs.services }}"
+
+          if [ "$INPUT" = "all" ]; then
+            echo "matrix={\"service\":$ALL_SERVICES}" >> $GITHUB_OUTPUT
+          else
+            SELECTED=$(echo $INPUT | tr ',' '\n' | sed 's/ //g' | jq -R . | jq -s . | tr -d '\n')
+            echo "matrix={\"service\":$SELECTED}" >> $GITHUB_OUTPUT
+          fi
+
+  redeploy:
+    name: Force redeploy ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    needs: prepare
+
+    strategy:
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.ACTION_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Force new ECS deployment
+        run: |
+          aws ecs update-service \
+            --cluster ecs-v3-cluster \
+            --service ${{ matrix.service }}-service \
+            --force-new-deployment \
+            --region ${{ env.AWS_REGION }}
