@@ -21,6 +21,9 @@ locals {
     sqs = "sqs"
     secretsmanager = "secretsmanager"
     sts = "sts"
+    ssmmessages = "ssmmessages"
+    ssm = "ssm"
+    ec2messages = "ec2messages"
   }
 }
 
