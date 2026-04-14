@@ -22,8 +22,13 @@ resource "aws_ecs_task_definition" "payment-service-task" {
       {
         name  = "SQS_QUEUE_URL"
         value = var.sqs_queue_url
+      },
+      {
+        name = "DATABASE_URL"
+        value = "postgres://app:${var.db_password}@${var.rds_endpoint}:5432/orders"
       }
       ]
+      
       
       portMappings = [
         {
@@ -41,14 +46,6 @@ resource "aws_ecs_task_definition" "payment-service-task" {
 
         }
        }
-
-      secrets = [
-        {
-            name = "DATABASE_URL"
-            valueFrom = var.database_url_secret_arn
-        }
-      ]
-
     },
   ])
 
@@ -63,10 +60,6 @@ resource "aws_ecs_service" "payment-service" {
   task_definition = aws_ecs_task_definition.payment-service-task.arn
   desired_count   = 1
   launch_type = "FARGATE"
-
-  lifecycle {
-    ignore_changes = [task_definition]
-  }
 
   network_configuration {
     security_groups = [var.ecs_sg]

@@ -18,6 +18,13 @@ resource "aws_ecs_task_definition" "scheduler-task" {
       name      = local.name
       image     = var.image
       essential = true
+
+      environment = [
+        {
+          name = "DATABASE_URL"
+          value = "postgres://app:${var.db_password}@${var.rds_endpoint}:5432/orders"
+        }
+      ]      
       
       logConfiguration = {
         logDriver = "awslogs"
@@ -28,14 +35,6 @@ resource "aws_ecs_task_definition" "scheduler-task" {
 
         }
        }
-
-      secrets = [
-        {
-            name = "DATABASE_URL"
-            valueFrom = var.database_url_secret_arn
-        }
-      ]
-
     },
   ])
 
@@ -50,10 +49,6 @@ resource "aws_ecs_service" "scheduler-service" {
   task_definition = aws_ecs_task_definition.scheduler-task.arn
   desired_count   = 1
   launch_type = "FARGATE"
-
-  lifecycle {
-    ignore_changes = [task_definition]
-  }
 
   network_configuration {
     security_groups = [var.ecs_sg]

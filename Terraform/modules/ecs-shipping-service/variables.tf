@@ -60,12 +60,6 @@ variable "ecs_cluster_id" {
   type = string
 }
 
-variable "database_url_secret_arn" {
-  description = "database url"
-  type = string
-  sensitive = true
-}
-
 variable "service_discovery_arn" {
   description = "arn of the service discovery"
   type = string
@@ -78,5 +72,15 @@ variable "task_role_arn" {
 
 variable "sqs_queue_url" {
   description = "url for sqs queue"
+  type = string
+}
+
+variable "db_password" {
+  description = "password for the database"
+  type = string
+}
+
+variable "rds_endpoint" {
+  description = "endpoint of rds"
   type = string
 }

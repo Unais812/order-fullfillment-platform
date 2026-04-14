@@ -16,12 +16,16 @@ resource "aws_ecs_task_definition" "order-service-task" {
     {
       name      = local.name
       image     = var.image
-      essential = true
+      essential = true    
 
       environment = [
       {
         name  = "SQS_QUEUE_URL"
         value = var.sqs_queue_url
+      },
+      {
+        name = "DATABASE_URL"
+        value = "postgres://app:${var.db_password}@${var.rds_endpoint}:5432/orders"
       }
       ]
       
@@ -41,14 +45,6 @@ resource "aws_ecs_task_definition" "order-service-task" {
 
         }
        }
-
-      secrets = [
-        {
-            name = "DATABASE_URL"
-            valueFrom = var.database_url_secret_arn
-        }
-      ]
-
     },
   ])
 
@@ -65,9 +61,6 @@ resource "aws_ecs_service" "order-service" {
   launch_type = "FARGATE"
   enable_execute_command = true
 
-  lifecycle {
-    ignore_changes = [task_definition]
-  }
 
   network_configuration {
     security_groups = [var.ecs_sg]
