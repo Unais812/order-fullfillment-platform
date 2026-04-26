@@ -1,5 +1,5 @@
 # Use the official Golang image as the base
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # Set working directory inside the container
 WORKDIR /build
@@ -17,15 +17,12 @@ COPY . .
 RUN go build -o app .
 
 # Final lightweight stage
-FROM gcr.io/distroless/static-debian12 
+FROM golang:1.24-alpine
 
 WORKDIR /build
 
 # Copy the compiled binary from the builder stage
 COPY --from=builder /app /bin/app
-
-# Distroless image already has a user baked in 
-USER nonroot 
 
 # this app doesnt have a port, this is the health check port
 EXPOSE 8090

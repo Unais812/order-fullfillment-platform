@@ -1,5 +1,5 @@
 # Use the official Golang image as the base
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # Set working directory inside the container
 WORKDIR /build 
@@ -17,7 +17,7 @@ COPY . .
 RUN go build -o app .
 
 # Final lightweight stage
-FROM golang:1.23-alpine
+FROM golang:1.24-alpine
 
 WORKDIR /build
 
