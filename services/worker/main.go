@@ -31,11 +31,11 @@ func main() {
 
 	// Internal service URLs for event-driven calls
 	services := map[string]string{
-		"inventory":    getEnv("INVENTORY_SERVICE_URL", "http://inventory-service:8082"),
-		"payment":      getEnv("PAYMENT_SERVICE_URL", "http://payment-service:8083"),
-		"notification": getEnv("NOTIFICATION_SERVICE_URL", "http://notification-service:8084"),
-		"shipping":     getEnv("SHIPPING_SERVICE_URL", "http://shipping-service:8085"),
-		"order":        getEnv("ORDER_SERVICE_URL", "http://order-service:8081"),
+		"inventory":    getEnv("INVENTORY_SERVICE_URL", "http://inventory-service.ecs.local:8082"),
+		"payment":      getEnv("PAYMENT_SERVICE_URL", "http://payment-service.ecs.local:8083"),
+		"notification": getEnv("NOTIFICATION_SERVICE_URL", "http://notification-service.ecs.local:8084"),
+		"shipping":     getEnv("SHIPPING_SERVICE_URL", "http://shipping-service.ecs.local:8085"),
+		"order":        getEnv("ORDER_SERVICE_URL", "http://order-service:.ecs.local8081"),
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
