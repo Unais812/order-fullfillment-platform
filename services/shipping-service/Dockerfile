@@ -22,9 +22,9 @@ FROM golang:1.24-alpine
 WORKDIR /build
 
 # Copy the compiled binary from the builder stage
-COPY --from=builder /app /bin/app
+COPY --from=builder /build/app /app
 
 EXPOSE 8085
 
 # Run the application
-CMD ["/bin/app"]
+CMD ["/app"]

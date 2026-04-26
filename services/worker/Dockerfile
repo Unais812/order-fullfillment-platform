@@ -22,10 +22,10 @@ FROM golang:1.24-alpine
 WORKDIR /build
 
 # Copy the compiled binary from the builder stage
-COPY --from=builder /app /bin/app
+COPY --from=builder /build/app /app
 
 # this app doesnt have a port, this is the health check port
 EXPOSE 8090
 
 # Run the application
-CMD ["/bin/app"]
+CMD ["/app"]
