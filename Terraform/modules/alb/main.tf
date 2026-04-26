@@ -98,7 +98,8 @@ resource "aws_lb_listener_rule" "api-gateway" {
     path_pattern {
       values = [
         "/api/*",
-        "/auth/*"
+        "/auth/*",
+        "/healthz"
         ]
     }
   }
