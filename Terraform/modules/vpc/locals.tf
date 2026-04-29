@@ -35,6 +35,7 @@ locals {
     "payment-service" = { name = "payment-service", namespace = "ecs.local", port = 8083 }
     "notification-service" = { name = "notification-service", namespace = "ecs.local", port = 8084 }
     "shipping-service" = { name = "shipping-service", namespace = "ecs.local", port = 8085 }
+
   }
 }
 
@@ -46,5 +47,6 @@ locals {
     payment-service = "payment-service"
     notification-service = "notification-service"
     shipping-service = "shipping-service"
+    api-gateway = "api-gateway"
   }
 }
