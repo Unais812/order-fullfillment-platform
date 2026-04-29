@@ -1,5 +1,5 @@
 resource "aws_elasticache_subnet_group" "redis" {
-  name       = "ecs-v3-redis-subnet-group"
+  name       = "ecs-v3-redis-subnet-groups"
   subnet_ids = var.private_subnet_ids
 }
 
