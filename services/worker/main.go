@@ -11,6 +11,9 @@ import (
 	"time"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"bytes"
 	"fmt"
 	"io"
@@ -23,7 +26,34 @@ type Event struct {
 	Timestamp string                 `json:"timestamp"`
 }
 
+type metrics struct {
+	opsProcessed prometheus.Counter
+}
+
+func newMetrics(reg prometheus.Registerer) *metrics {
+	m := &metrics{
+		opsProcessed: promauto.With(reg).NewCounter(prometheus.CounterOpts{
+			Name: "myapp_processed_ops_total",
+			Help: "The total number of processed events",
+		}),
+	}
+	return m
+}
+
+func recordMetrics(m *metrics) {
+	go func() {
+		for {
+			m.opsProcessed.Inc()
+			time.Sleep(2 * time.Second)
+		}
+	}()
+}
+
 func main() {
+	reg := prometheus.NewRegistry()
+	m := newMetrics(reg)
+	recordMetrics(m)
+
 	sqsQueue := os.Getenv("SQS_QUEUE_URL")
 	if sqsQueue == "" {
 		log.Fatal("SQS_QUEUE_URL is required")
@@ -61,6 +91,9 @@ func main() {
 		log.Println("Shutting down worker...")
 		cancel()
 	}()
+
+	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
+	http.ListenAndServe(":2112", nil)
 
 	log.Println("Worker started, polling SQS for events...")
 	pollAndProcess(ctx, sqsQueue, services)

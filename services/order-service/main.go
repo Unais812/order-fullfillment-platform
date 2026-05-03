@@ -12,6 +12,9 @@ import (
 	"context"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	_ "github.com/lib/pq"
 	
 )
@@ -52,7 +55,34 @@ var validTransitions = map[string][]string{
 	"cancelled":  {},
 }
 
+type metrics struct {
+	opsProcessed prometheus.Counter
+}
+
+func newMetrics(reg prometheus.Registerer) *metrics {
+	m := &metrics{
+		opsProcessed: promauto.With(reg).NewCounter(prometheus.CounterOpts{
+			Name: "myapp_processed_ops_total",
+			Help: "The total number of processed events",
+		}),
+	}
+	return m
+}
+
+func recordMetrics(m *metrics) {
+	go func() {
+		for {
+			m.opsProcessed.Inc()
+			time.Sleep(2 * time.Second)
+		}
+	}()
+}
+
 func main() {
+	reg := prometheus.NewRegistry()
+	m := newMetrics(reg)
+	recordMetrics(m)
+
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
 		log.Fatal("DATABASE_URL is required")
@@ -76,6 +106,8 @@ func main() {
 	mux.HandleFunc("/healthz", handleHealth)
 	mux.HandleFunc("/", handleOrders)
 	mux.HandleFunc("/status", handleUpdateStatus)
+	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
+	http.ListenAndServe(":2112", nil)
 
 	port := getEnv("PORT", "8081")
 	log.Printf("Order service listening on :%s", port)

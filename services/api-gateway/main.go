@@ -14,10 +14,35 @@ import (
 	"sync"
 	"syscall"
 	"time"
-
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v5"
 )
+
+type metrics struct {
+	opsProcessed prometheus.Counter
+}
+
+func newMetrics(reg prometheus.Registerer) *metrics {
+	m := &metrics{
+		opsProcessed: promauto.With(reg).NewCounter(prometheus.CounterOpts{
+			Name: "myapp_processed_ops_total",
+			Help: "The total number of processed events",
+		}),
+	}
+	return m
+}
+
+func recordMetrics(m *metrics) {
+	go func() {
+		for {
+			m.opsProcessed.Inc()
+			time.Sleep(2 * time.Second)
+		}
+	}()
+}
 
 var (
 	redisClient *redis.Client
@@ -27,6 +52,10 @@ var (
 )
 
 func main() {
+	reg := prometheus.NewRegistry()
+	m := newMetrics(reg)
+	recordMetrics(m)
+
 	jwtSecret = []byte(getEnv("JWT_SECRET", "change-me-in-production"))
 
 	// Service routes - internal service URLs
@@ -60,6 +89,9 @@ func main() {
 	mux.HandleFunc("/auth/login", handleLogin)
 	mux.HandleFunc("/auth/register", handleRegister)
 	mux.HandleFunc("/", handleProxy)
+	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
+	http.ListenAndServe(":2112", nil)
+
 
 	port := getEnv("PORT", "8080")
 	server := &http.Server{
