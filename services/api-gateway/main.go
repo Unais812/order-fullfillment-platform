@@ -15,34 +15,11 @@ import (
 	"syscall"
 	"time"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v5"
 )
-
-type metrics struct {
-	opsProcessed prometheus.Counter
-}
-
-func newMetrics(reg prometheus.Registerer) *metrics {
-	m := &metrics{
-		opsProcessed: promauto.With(reg).NewCounter(prometheus.CounterOpts{
-			Name: "myapp_processed_ops_total",
-			Help: "The total number of processed events",
-		}),
-	}
-	return m
-}
-
-func recordMetrics(m *metrics) {
-	go func() {
-		for {
-			m.opsProcessed.Inc()
-			time.Sleep(2 * time.Second)
-		}
-	}()
-}
 
 var (
 	redisClient *redis.Client
@@ -53,8 +30,10 @@ var (
 
 func main() {
 	reg := prometheus.NewRegistry()
-	m := newMetrics(reg)
-	recordMetrics(m)
+	reg.MustRegister(
+		collectors.NewGoCollector(),
+		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
+	)
 
 	jwtSecret = []byte(getEnv("JWT_SECRET", "change-me-in-production"))
 
