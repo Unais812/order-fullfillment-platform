@@ -24,7 +24,7 @@ module "ecs-api-gatewway" {
   elasticache_url = module.elasticache.elasticache_endpoint
   sqs_queue_url = module.sqs.queue_url
   task_role_arn = module.iam.api_gateway_task_role_arn
-  service_discovery_arn = module.vpc.service_discovery_arns["dashboard-api"]
+  service_discovery_arn = module.vpc.service_discovery_arns["api-gateway"]
 
 }
 
@@ -167,6 +167,8 @@ module "elasticache" {
 
 module "observability" {
   source = "./modules/observability"
-  private_subnet_ids = module.vpc.private_subnet_ids["2"]
   vpc_id = module.vpc.vpc_id
+  public_subnet_id = module.vpc.public_subnet_ids["1"]
+  igw_id = module.vpc.igw_id
+  ecs_sg = module.security-groups.ecs_sg
 }
