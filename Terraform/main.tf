@@ -172,3 +172,10 @@ module "observability" {
   igw_id = module.vpc.igw_id
   ecs_sg = module.security-groups.ecs_sg
 }
+
+module "route53" {
+  source = "./modules/route53"
+  alb_dns = module.alb.alb_dns
+  alb_zone_id = module.alb.alb_zone_id
+  
+}
