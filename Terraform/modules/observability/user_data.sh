@@ -112,6 +112,18 @@ datasources:
     access: proxy
     url: http://prometheus:9090
     isDefault: true
+    
+  - name: CloudWatch
+    type: cloudwatch
+    access: proxy
+    isDefault: true
+    editable: true
+
+    jsonData:
+      authType: default
+      defaultRegion: eu-north-1
+      assumeRoleArn: ""
+      customMetricsNamespaces: ""
 
 EOF
 
