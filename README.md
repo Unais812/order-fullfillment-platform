@@ -12,6 +12,8 @@ Built a production-grade, event-driven order fulfillment platform on AWS using a
 
 ## Architecture Diagram
 
+<img width="704" height="741" alt="ecsv3 diagram" src="https://github.com/user-attachments/assets/06dcfbb3-1e82-48fc-bd20-cb0610725c90" />
+
 
 ## System Design 
 
