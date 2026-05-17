@@ -42,11 +42,17 @@ Built a production-grade, event-driven order fulfillment platform on AWS using a
 **Issue:** SQS queue was provisioned with connections successfully initiated yet no messages were being sent/polled \
 **Solution:** The source code was missing functions to handle SQS messages so I created functions which allowed successful processing/polling of messages  
 
+---
+
 **Issue:** Prometheus could not resolve DNS for my individual services because the Cloud Map namespace i used included `.local`, which is reserved by Linux for multicast DNS (mDNS), causing service discovery requests such as `inventory-service.ecs.local` to be intercepted locally instead of resolving through AWS Route53 private DNS since the EC2 instance used the ubuntu AMI \
 **Solution:** Changed the Cloud Map namespace to include `.internal` rather than `.local`
 
+---
+
 **Issue:** API gateway service health constantly failing at the browser level but was successful at load balancer level   
 **Solution:** Exposed `/healthz` path pattern through API gateways listener rule since it monitored its own health rather than relying on ALB
+
+---
 
 **Issue:** ECS tasks could not communicate with each other even though they were inside the same VPC and subnets. The security group did not allow inbound traffic from other services using the same security group, so AWS blocked the traffic \
 **Solution:** Added a self referenced inbound rule to the ECS services security group, allowing traffic from the same security group on the required ports which enabled internal communication between ECS tasks
