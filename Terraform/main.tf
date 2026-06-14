@@ -33,7 +33,7 @@ module "ecs_services" {
   task_role_arn_scheduler = module.iam.scheduler_task_role_arn
   task_role_arn_shipping = module.iam.shipping_service_task_role_arn
   task_role_arn_worker = module.iam.worker_task_role_arn
-  service_discovery_arn_api = module.vpc.service_discovery_arns
+  service_discovery_arn_api = module.vpc.service_discovery_arns["api-gateway"]
   service_discovery_arn_dashboard = module.vpc.service_discovery_arns["dashboard-api"]
   service_discovery_arn_inventory = module.vpc.service_discovery_arns["inventory-service"]
   service_discovery_arn_notification = module.vpc.service_discovery_arns["notification-service"]
