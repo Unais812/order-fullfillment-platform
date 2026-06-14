@@ -414,3 +414,33 @@ variable "elasticache_url" {
   description = "url for elasticache"
   type = string
 }
+
+variable "memory" {
+  description = "memory for the containers"
+  type = number
+  default = 512
+}
+
+variable "cpu" {
+  description = "cpu for the containers"
+  type = number
+  default = 256
+}
+
+variable "launch_type" {
+  description = "launch type for the containers"
+  type = string
+  default = "FARGATE"
+}
+
+variable "network_mode" {
+  description = "network mode for the containers"
+  type = string
+  default = "awsvpc"   
+}
+
+variable "desired_count" {
+  description = "desired count for the amount of tasks"
+  type = number
+  default = 1
+}

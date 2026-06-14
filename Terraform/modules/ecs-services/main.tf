@@ -6,10 +6,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_api" {
 resource "aws_ecs_task_definition" "api-gateway-task" {
   family = local.name_api
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_api
 
   container_definitions = jsonencode([
@@ -86,8 +86,8 @@ resource "aws_ecs_service" "api-gateway-service" {
   name            = "${local.name_api}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.api-gateway-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
   enable_execute_command = true
 
   # CI/CD manages the task definition after initial creation.
@@ -120,10 +120,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_dashboard_api" {
 resource "aws_ecs_task_definition" "dashboard-api-task" {
   family = local.name_dashboard
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_dashboard
 
   container_definitions = jsonencode([
@@ -166,8 +166,8 @@ resource "aws_ecs_service" "dashboard-api-service" {
   name            = "${local.name_dashboard}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.dashboard-api-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
   enable_execute_command = true
 
   network_configuration {
@@ -198,10 +198,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_inventory_service" {
 resource "aws_ecs_task_definition" "inventory-service-task" {
   family = local.name_inventory
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_inventory
 
   container_definitions = jsonencode([
@@ -245,8 +245,8 @@ resource "aws_ecs_service" "inventory-service" {
   name            = "${local.name_inventory}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.inventory-service-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
 
   network_configuration {
     security_groups = [var.ecs_sg]
@@ -269,10 +269,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_notification_service" {
 resource "aws_ecs_task_definition" "notification-service-task" {
   family = local.name_notification
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_notification
   container_definitions = jsonencode([
     {
@@ -315,8 +315,8 @@ resource "aws_ecs_service" "notification-service" {
   name            = "${local.name_notification}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.notification-service-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
 
   network_configuration {
     security_groups = [var.ecs_sg]
@@ -339,10 +339,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_order_service" {
 resource "aws_ecs_task_definition" "order-service-task" {
   family = local.name_order
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_order
 
   container_definitions = jsonencode([
@@ -390,8 +390,8 @@ resource "aws_ecs_service" "order-service" {
   name            = "${local.name_order}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.order-service-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
   enable_execute_command = true
 
 
@@ -416,10 +416,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_payment_service" {
 resource "aws_ecs_task_definition" "payment-service-task" {
   family = local.name_payment
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_payment
 
   container_definitions = jsonencode([
@@ -468,8 +468,8 @@ resource "aws_ecs_service" "payment-service" {
   name            = "${local.name_payment}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.payment-service-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
 
   network_configuration {
     security_groups = [var.ecs_sg]
@@ -493,10 +493,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_scheduler" {
 resource "aws_ecs_task_definition" "scheduler-task" {
   family = local.name_scheduler
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_scheduler
 
   container_definitions = jsonencode([
@@ -533,8 +533,8 @@ resource "aws_ecs_service" "scheduler-service" {
   name            = "${local.name_scheduler}"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.scheduler-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
 
   network_configuration {
     security_groups = [var.ecs_sg]
@@ -553,10 +553,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_shipping_service" {
 resource "aws_ecs_task_definition" "shipping-service-task" {
   family = local.name_shipping
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_shipping
 
   container_definitions = jsonencode([
@@ -604,8 +604,8 @@ resource "aws_ecs_service" "shipping-service" {
   name            = "${local.name_shipping}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.shipping-service-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
 
   network_configuration {
     security_groups = [var.ecs_sg]
@@ -628,10 +628,10 @@ resource "aws_cloudwatch_log_group" "cw_log_group_worker" {
 resource "aws_ecs_task_definition" "worker-task" {
   family = local.name_worker
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
   execution_role_arn = var.execution_role_arn
-  memory = 512
-  cpu = 256
+  memory = var.memory
+  cpu = var.cpu
   task_role_arn = var.task_role_arn_worker
 
   container_definitions = jsonencode([
@@ -690,8 +690,8 @@ resource "aws_ecs_service" "worker-service" {
   name            = "${local.name_worker}-service"
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.worker-task.arn
-  desired_count   = 1
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type = var.launch_type
 
   network_configuration {
     security_groups = [var.ecs_sg]
