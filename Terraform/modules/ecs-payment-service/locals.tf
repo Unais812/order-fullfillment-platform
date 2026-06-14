@@ -1,3 +1,0 @@
-locals {
-    name = "payment-service"
-}
