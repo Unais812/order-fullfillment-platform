@@ -237,7 +237,7 @@ variable "task_role_arn_payment" {
 variable "image_scheduler" {
   description = "image for scheduler service"
   type = string
-  default = "801822495646.dkr.ecr.eu-north-1.amazonaws.com/scheduler-service:latest"
+  default = "801822495646.dkr.ecr.eu-north-1.amazonaws.com/scheduler:latest"
 }
 
 variable "container_port_scheduler" {
