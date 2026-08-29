@@ -67,16 +67,6 @@ Rate limiting controls how many requests a client can send over a period of time
 
 Spending excessive time debugging a single issue can quickly become mentally exhausting. In many cases, stepping away from the problem and revisiting it later with a clearer mind leads to a faster solution than continuing while fatigued
 
-## The Journey
-Just a year ago i was a typical 15 year old with no ambitions in life or a slight interest in tech, fast forward to now, i have built something i am genuinely proud of... an entire microservice event driven system  
-
-It took SOO long to complete this, countless nights of debugging and mixing college exam revision 😅
-
-I honestly felt like giving up on this thinking that i would never understand it but Alhamdulilah I managed to pull it off 
-
-Looking back, provisioning the infrastructure was actually the easier part, the real challenge was understanding how the entire system works end to end and making design decisions that affected multiple services which took far longer than writing Terraform 
-
-This project represents a huge learning journey for me, and I hope it reflects the serious effort that went into it, onto the next 🚀
 
 ## Screenshots proof
 
