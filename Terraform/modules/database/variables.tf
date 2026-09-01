@@ -11,4 +11,5 @@ variable "rds_sg" {
 variable "db_password" {
   description = "db password"
   type = string
+  sensitive = true
 }
