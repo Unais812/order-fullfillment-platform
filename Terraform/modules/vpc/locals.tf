@@ -19,7 +19,6 @@ locals {
     ecr_dkr = "ecr.dkr"
     logs = "logs"
     sqs = "sqs"
-    secretsmanager = "secretsmanager"
     sts = "sts"
     ssmmessages = "ssmmessages"
     ssm = "ssm"
