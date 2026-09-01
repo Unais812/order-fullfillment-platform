@@ -34,20 +34,6 @@ services:
       - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
     ports:
       - "3000:3000"
-  yace:
-    image: quay.io/prometheuscommunity/yet-another-cloudwatch-exporter:latest
-    container_name: yace
-    restart: unless-stopped
-
-    ports:
-      - "5000:5000"
-    command:
-      - "--config.file=/tmp/config.yml"
-    volumes:
-      - ./yace-config.yaml:/tmp/config.yml:ro
-    environment:
-      AWS_REGION: eu-north-1
-
 volumes:  
   prometheus-data:
   grafana-data:
@@ -66,10 +52,6 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
-
-  - job_name: 'yace'
-    static_configs:
-      - targets: ['yace:5000']
 
   - job_name: 'api-gateway'
     static_configs:
@@ -124,97 +106,6 @@ datasources:
       defaultRegion: eu-north-1
       assumeRoleArn: ""
       customMetricsNamespaces: ""
-
-EOF
-
-cat <<EOF > yace-config.yaml
-
-apiVersion: v1alpha1
-sts-region: eu-north-1
-discovery:
-  jobs:
-    # ECS Cluster-level metrics
-    - type: AWS/ECS
-      regions: [eu-north-1]
-      searchTags:
-        - key: ClusterName
-          value: ecs-v3-cluster
-      period: 60
-      length: 300
-      addCloudwatchTimestamp: false
-      metrics:
-        # CPU Metrics
-        - name: CPUUtilization
-          statistics:
-            - Average
-            - Maximum
-        - name: CPUReservation
-          statistics:
-            - Average
-        
-        # Memory Metrics
-        - name: MemoryUtilization
-          statistics:
-            - Average
-            - Maximum
-        - name: MemoryReservation
-          statistics:
-            - Average
-        
-        # Task/Service Health Metrics (Critical!)
-        - name: RunningTasksCount
-          statistics:
-            - Average
-            - Minimum  # Low minimum indicates tasks dying
-        - name: DesiredTaskCount
-          statistics:
-            - Average
-        - name: PendingTasksCount
-          statistics:
-            - Average
-            - Maximum  # High pending = placement issues
-        
-        # Service Deployment Metrics
-        - name: DeploymentSuccessful
-          statistics:
-            - Average
-        - name: DeploymentFailed
-          statistics:
-            - Sum
-    
-    # Service-level metrics (more granular)
-    - type: AWS/ECS
-      regions: [eu-north-1]
-      dimensionNameRequirements:
-        - ServiceName
-        - ClusterName
-      searchTags:
-        - key: ClusterName
-          value: ecs-v3-cluster
-      period: 60
-      length: 300
-      metrics:
-        - name: CPUUtilization
-          statistics:
-            - Average
-            - Maximum
-        - name: MemoryUtilization
-          statistics:
-            - Average
-            - Maximum
-        - name: RunningTasksCount
-          statistics:
-            - Average
-        - name: DesiredTaskCount
-          statistics:
-            - Average
-        - name: PendingTasksCount
-          statistics:
-            - Maximum
-        - name: TargetTracking
-          statistics:
-            - Average
-
 EOF
 
 cd /opt/observability
