@@ -94,3 +94,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker push $ECR_REGISTRY/${{ matrix.service }}:latest
+          docker push $ECR_REGISTRY/${{ matrix.service }}:${{ github.sha }}
